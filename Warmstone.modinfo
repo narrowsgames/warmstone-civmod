@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="644637f8-7e68-4428-9dc3-a3ef0e9b8ee1" version="1">
+	<Properties>
+		<Name>WARMSTONE_MOD_TITLE</Name>
+		<Description>WARMSTONE_MOD_DESCRIPTION</Description>
+		<Teaser>WARMSTONE_MOD_TEASER</Teaser>
+		<Authors>WARMSTONE_MOD_AUTHOR</Authors>
+	</Properties>
+	<Dependencies>
+		<Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
+	</Dependencies>
+	<InGameActions>
+		<UpdateDatabase id="Warmstone_Systems">
+			<Properties>
+				<LoadOrder>10</LoadOrder>
+			</Properties>
+			<File priority="1">Data/Systems/Warmstone_Resources.xml</File>
+			<File priority="2">Data/Systems/Warmstone_Terrain.xml</File>
+			<File priority="3">Data/Systems/Warmstone_Governments.xml</File>
+		</UpdateDatabase>
+	</InGameActions>
+	<Files>
+		<File>Data/Systems/Warmstone_Resources.xml</File>
+		<File>Data/Systems/Warmstone_Terrain.xml</File>
+		<File>Data/Systems/Warmstone_Governments.xml</File>
+	</Files>
+</Mod>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Warmstone resource systems (mechanics only).
+
+  RESOURCE_WARMSTONE_CANOPY_SAP : Bonus resource on FEATURE_WARMSTONE_CANOPY, standing
+    in for the canopy/ground-layer carbon economy (see homeworld_brief.md, "Warmstone's
+    Biosphere"). Improved by the existing IMPROVEMENT_PLANTATION - no new improvement
+    needed, same pattern vanilla uses for Cocoa/Coffee/etc. on Jungle.
+
+  RESOURCE_WARMSTONE_VENT_GAS : Strategic resource on FEATURE_WARMSTONE_VENT_MARSH,
+    standing in for the Wilder sulfide-wetland's geothermal/sulfide chemistry. Needs
+    its own extraction improvement (IMPROVEMENT_WARMSTONE_VENT_TAP), modeled directly
+    on vanilla's IMPROVEMENT_OIL_WELL (same EnforceTerrain/MustRemoveFeature pattern),
+    reusing the Oil Well's existing icon rather than shipping new art.
+
+  Name attributes are literal internal Type IDs, not authored copy, per the AI content
+  boundary - see docs/ARCHITECTURE.md.
+-->
+<GameInfo>
+	<Types>
+		<Row Type="RESOURCE_WARMSTONE_CANOPY_SAP" Kind="KIND_RESOURCE"/>
+		<Row Type="RESOURCE_WARMSTONE_VENT_GAS" Kind="KIND_RESOURCE"/>
+		<Row Type="IMPROVEMENT_WARMSTONE_VENT_TAP" Kind="KIND_IMPROVEMENT"/>
+	</Types>
+	<Tags>
+		<Row Tag="CLASS_FOOD" Vocabulary="RESOURCE_CLASS"/>
+		<Row Tag="CLASS_PRODUCTION" Vocabulary="RESOURCE_CLASS"/>
+		<Row Tag="CLASS_SCIENCE" Vocabulary="RESOURCE_CLASS"/>
+	</Tags>
+	<TypeTags>
+		<Row Type="RESOURCE_WARMSTONE_CANOPY_SAP" Tag="CLASS_FOOD"/>
+		<Row Type="RESOURCE_WARMSTONE_CANOPY_SAP" Tag="CLASS_PRODUCTION"/>
+		<Row Type="RESOURCE_WARMSTONE_VENT_GAS" Tag="CLASS_PRODUCTION"/>
+		<Row Type="RESOURCE_WARMSTONE_VENT_GAS" Tag="CLASS_SCIENCE"/>
+	</TypeTags>
+	<Resources>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" Name="RESOURCE_WARMSTONE_CANOPY_SAP" ResourceClassType="RESOURCECLASS_BONUS" Frequency="6"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_VENT_GAS" Name="RESOURCE_WARMSTONE_VENT_GAS" ResourceClassType="RESOURCECLASS_STRATEGIC" Frequency="8" RevealedEra="1"/>
+	</Resources>
+	<Resource_ValidTerrains>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" TerrainType="TERRAIN_GRASS"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" TerrainType="TERRAIN_GRASS_HILLS"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" TerrainType="TERRAIN_PLAINS"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" TerrainType="TERRAIN_PLAINS_HILLS"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_VENT_GAS" TerrainType="TERRAIN_GRASS"/>
+	</Resource_ValidTerrains>
+	<Resource_ValidFeatures>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" FeatureType="FEATURE_WARMSTONE_CANOPY"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_VENT_GAS" FeatureType="FEATURE_WARMSTONE_VENT_MARSH"/>
+	</Resource_ValidFeatures>
+	<Resource_YieldChanges>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" YieldType="YIELD_FOOD" YieldChange="1"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" YieldType="YIELD_PRODUCTION" YieldChange="1"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_VENT_GAS" YieldType="YIELD_PRODUCTION" YieldChange="2"/>
+		<Row ResourceType="RESOURCE_WARMSTONE_VENT_GAS" YieldType="YIELD_SCIENCE" YieldChange="1"/>
+	</Resource_YieldChanges>
+	<Improvements>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_VENT_TAP" Name="IMPROVEMENT_WARMSTONE_VENT_TAP" Description="IMPROVEMENT_WARMSTONE_VENT_TAP" Icon="ICON_IMPROVEMENT_OIL_WELL" PlunderType="PLUNDER_GOLD" PlunderAmount="50" EnforceTerrain="true" Appeal="-1"/>
+	</Improvements>
+	<Improvement_ValidTerrains>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_VENT_TAP" TerrainType="TERRAIN_GRASS"/>
+	</Improvement_ValidTerrains>
+	<Improvement_ValidResources>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_VENT_TAP" ResourceType="RESOURCE_WARMSTONE_VENT_GAS" MustRemoveFeature="false"/>
+		<!-- Reuse the existing Plantation improvement for the bonus resource - no new improvement needed. -->
+		<Row ImprovementType="IMPROVEMENT_PLANTATION" ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" MustRemoveFeature="false"/>
+	</Improvement_ValidResources>
+	<Improvement_ValidBuildUnits>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_VENT_TAP" UnitType="UNIT_BUILDER"/>
+	</Improvement_ValidBuildUnits>
+</GameInfo>

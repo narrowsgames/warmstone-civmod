@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Warmstone terrain/feature systems (mechanics only).
+
+  Two new Feature types standing in for the two documented Warmstone species biomes
+  (see beyond-warmsun-work/docs/homeworld_brief.md, "Species Biomes"):
+    - FEATURE_WARMSTONE_CANOPY   : Stalwart closed-canopy rainforest, mechanically
+                                    parallel to vanilla FEATURE_JUNGLE.
+    - FEATURE_WARMSTONE_VENT_MARSH : Wilder sulfide wetland, mechanically parallel
+                                    to vanilla FEATURE_MARSH.
+  They are distinct Types (not reskins of the vanilla features) because they carry
+  different lore identity and will take civ-specific modifiers in later phases
+  (Stalwart/Wilder unique abilities). Placement terrains mirror the vanilla features
+  they parallel, confirmed against the installed game's own Features.xml.
+
+  No new art: Icon/visual art paths are left unset here. Until real art exists, the
+  game will render these with a default/fallback look. See docs/ARCHITECTURE.md.
+  Name values are literal internal Type IDs, not authored copy - see the AI content
+  boundary in the plan and docs/ARCHITECTURE.md.
+-->
+<GameInfo>
+	<Types>
+		<Row Type="FEATURE_WARMSTONE_CANOPY" Kind="KIND_FEATURE"/>
+		<Row Type="FEATURE_WARMSTONE_VENT_MARSH" Kind="KIND_FEATURE"/>
+	</Types>
+	<Features>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" Name="FEATURE_WARMSTONE_CANOPY" RemoveTech="TECH_BRONZE_WORKING" Removable="true" Forest="true" SightThroughModifier="1" DefenseModifier="3" MovementChange="1" Appeal="-1" AntiquityPriority="5"/>
+		<Row FeatureType="FEATURE_WARMSTONE_VENT_MARSH" Name="FEATURE_WARMSTONE_VENT_MARSH" RemoveTech="TECH_IRRIGATION" Removable="true" DefenseModifier="-2" MovementChange="1" Appeal="-1" AntiquityPriority="2"/>
+	</Features>
+	<Feature_ValidTerrains>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" TerrainType="TERRAIN_GRASS"/>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" TerrainType="TERRAIN_GRASS_HILLS"/>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" TerrainType="TERRAIN_PLAINS"/>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" TerrainType="TERRAIN_PLAINS_HILLS"/>
+		<Row FeatureType="FEATURE_WARMSTONE_VENT_MARSH" TerrainType="TERRAIN_GRASS"/>
+	</Feature_ValidTerrains>
+	<Feature_YieldChanges>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" YieldType="YIELD_FOOD" YieldChange="1"/>
+		<Row FeatureType="FEATURE_WARMSTONE_VENT_MARSH" YieldType="YIELD_FOOD" YieldChange="1"/>
+		<Row FeatureType="FEATURE_WARMSTONE_VENT_MARSH" YieldType="YIELD_PRODUCTION" YieldChange="1"/>
+	</Feature_YieldChanges>
+	<Feature_Removes>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" YieldType="YIELD_PRODUCTION" Yield="10"/>
+		<Row FeatureType="FEATURE_WARMSTONE_CANOPY" YieldType="YIELD_FOOD" Yield="10"/>
+		<Row FeatureType="FEATURE_WARMSTONE_VENT_MARSH" YieldType="YIELD_FOOD" Yield="20"/>
+	</Feature_Removes>
+</GameInfo>

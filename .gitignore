@@ -1,0 +1,7 @@
+# Third-party reference doc - not mod source, and its own copyright notice restricts
+# bundling it into a larger set of documents. Keep it local only.
+CIVILIZATION 6 MODDING GUIDE.pdf
+
+# OS/editor junk
+.DS_Store
+Thumbs.db

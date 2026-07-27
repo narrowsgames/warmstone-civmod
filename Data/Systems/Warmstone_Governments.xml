@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Warmstone government systems (mechanics only).
+
+  Two new governments era-slotted alongside the vanilla modern-era set (Fascism/
+  Communism/Democracy), matching the History Brief's timeline where the Compact and
+  the Soft War both sit in that same late-industrial/modern span:
+
+    GOVERNMENT_WARMSTONE_COMPACT   : postwar global-governance model (the Compact),
+      PrereqCivic matches Democracy's tier. Diplomacy/tolerance-flavored: envoy bonus
+      and a small trade-route bonus, plus the lowest OtherGovernmentIntolerance of any
+      government in the mod (reflecting the Compact's coexistence premise).
+    GOVERNMENT_WARMSTONE_SOFT_WAR  : the ideological Noble/Sage rivalry era,
+      PrereqCivic matches Fascism's tier. Production/readiness-flavored: flat
+      production bonus plus a temporary production spike when declared on (proxy-war
+      paranoia), mirroring the existing "Citadel" trait pattern used elsewhere in the
+      base game.
+
+  Every Modifier below reuses an existing ModifierType and, where relevant, an
+  existing GovernmentBonusType - no new EffectTypes/CollectionTypes/BonusTypes are
+  invented, since mods cannot add those (see the guide's Dynamic Modifiers chapter).
+
+  Name/description attributes are literal internal Type IDs, not authored copy, per
+  the AI content boundary - see docs/ARCHITECTURE.md.
+-->
+<GameInfo>
+	<Types>
+		<Row Type="GOVERNMENT_WARMSTONE_COMPACT" Kind="KIND_GOVERNMENT"/>
+		<Row Type="GOVERNMENT_WARMSTONE_SOFT_WAR" Kind="KIND_GOVERNMENT"/>
+	</Types>
+	<Governments>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_COMPACT" Name="GOVERNMENT_WARMSTONE_COMPACT" InherentBonusDesc="GOVERNMENT_WARMSTONE_COMPACT_BONUS_DESC" BonusType="NO_GOVERNMENTBONUS" AccumulatedBonusShortDesc="GOVERNMENT_WARMSTONE_COMPACT_BONUS_DESC" AccumulatedBonusDesc="GOVERNMENT_WARMSTONE_COMPACT_BONUS_DESC" PrereqCivic="CIVIC_SUFFRAGE" OtherGovernmentIntolerance="0" InfluencePointsPerTurn="7" InfluencePointsThreshold="200" InfluenceTokensPerThreshold="3"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR" Name="GOVERNMENT_WARMSTONE_SOFT_WAR" InherentBonusDesc="GOVERNMENT_WARMSTONE_SOFT_WAR_BONUS_DESC" BonusType="NO_GOVERNMENTBONUS" AccumulatedBonusShortDesc="GOVERNMENT_WARMSTONE_SOFT_WAR_BONUS_DESC" AccumulatedBonusDesc="GOVERNMENT_WARMSTONE_SOFT_WAR_BONUS_DESC" PrereqCivic="CIVIC_TOTALITARIANISM" OtherGovernmentIntolerance="-5" InfluencePointsPerTurn="7" InfluencePointsThreshold="200" InfluenceTokensPerThreshold="3"/>
+	</Governments>
+	<Government_SlotCounts>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_COMPACT" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="2"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_COMPACT" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="2"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_COMPACT" GovernmentSlotType="SLOT_WILDCARD" NumSlots="2"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR" GovernmentSlotType="SLOT_MILITARY" NumSlots="2"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="2"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR" GovernmentSlotType="SLOT_WILDCARD" NumSlots="1"/>
+	</Government_SlotCounts>
+	<Modifiers>
+		<Row>
+			<ModifierId>WARMSTONE_COMPACT_ENVOYS</ModifierId>
+			<ModifierType>MODIFIER_PLAYER_GOVERNMENT_FLAT_BONUS</ModifierType>
+		</Row>
+		<Row>
+			<ModifierId>WARMSTONE_COMPACT_TRADE_ROUTES</ModifierId>
+			<ModifierType>MODIFIER_PLAYER_ADJUST_TRADE_ROUTE_CAPACITY</ModifierType>
+		</Row>
+		<Row>
+			<ModifierId>WARMSTONE_SOFT_WAR_PRODUCTION</ModifierId>
+			<ModifierType>MODIFIER_PLAYER_GOVERNMENT_FLAT_BONUS</ModifierType>
+		</Row>
+		<Row>
+			<ModifierId>WARMSTONE_SOFT_WAR_DEFENSIVE_PRODUCTION</ModifierId>
+			<ModifierType>MODIFIER_PLAYER_ADD_DIPLOMATIC_YIELD_MODIFIER</ModifierType>
+		</Row>
+	</Modifiers>
+	<ModifierArguments>
+		<Row><ModifierId>WARMSTONE_COMPACT_ENVOYS</ModifierId><Name>BonusType</Name><Value>GOVERNMENTBONUS_ENVOYS</Value></Row>
+		<Row><ModifierId>WARMSTONE_COMPACT_ENVOYS</ModifierId><Name>Amount</Name><Value>20</Value></Row>
+		<Row><ModifierId>WARMSTONE_COMPACT_TRADE_ROUTES</ModifierId><Name>Amount</Name><Value>1</Value></Row>
+		<Row><ModifierId>WARMSTONE_SOFT_WAR_PRODUCTION</ModifierId><Name>BonusType</Name><Value>GOVERNMENTBONUS_OVERALL_PRODUCTION</Value></Row>
+		<Row><ModifierId>WARMSTONE_SOFT_WAR_PRODUCTION</ModifierId><Name>Amount</Name><Value>10</Value></Row>
+		<Row><ModifierId>WARMSTONE_SOFT_WAR_DEFENSIVE_PRODUCTION</ModifierId><Name>DiplomaticYieldSource</Name><Value>WAR_DECLARATION_RECEIVED</Value></Row>
+		<Row><ModifierId>WARMSTONE_SOFT_WAR_DEFENSIVE_PRODUCTION</ModifierId><Name>TurnsActive</Name><Value>10</Value></Row>
+		<Row><ModifierId>WARMSTONE_SOFT_WAR_DEFENSIVE_PRODUCTION</ModifierId><Name>YieldType</Name><Value>YIELD_PRODUCTION</Value></Row>
+		<Row><ModifierId>WARMSTONE_SOFT_WAR_DEFENSIVE_PRODUCTION</ModifierId><Name>Amount</Name><Value>50</Value></Row>
+	</ModifierArguments>
+	<GovernmentModifiers>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_COMPACT"><ModifierId>WARMSTONE_COMPACT_ENVOYS</ModifierId></Row>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_COMPACT"><ModifierId>WARMSTONE_COMPACT_TRADE_ROUTES</ModifierId></Row>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR"><ModifierId>WARMSTONE_SOFT_WAR_PRODUCTION</ModifierId></Row>
+		<Row GovernmentType="GOVERNMENT_WARMSTONE_SOFT_WAR"><ModifierId>WARMSTONE_SOFT_WAR_DEFENSIVE_PRODUCTION</ModifierId></Row>
+	</GovernmentModifiers>
+</GameInfo>
