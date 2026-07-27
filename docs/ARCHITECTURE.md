@@ -72,42 +72,72 @@ docs/                   -- this file and other internal technical notes
 
 ## Total-conversion behavior: hiding vanilla leaders
 
-`Data/Systems/Warmstone_HideVanillaLeaders.xml` hides vanilla/DLC leaders from the
-"Choose Civilization" picker, keeping exactly one (Rome/Trajan) available so AI
-opponents have something to be assigned to while only Stalwarts exists.
+Two files hide vanilla/DLC leaders from the "Choose Civilization" picker, keeping
+exactly one (Rome/Trajan) available so AI opponents have something to be assigned
+to while only Stalwarts exists:
 
-**Revision history, since the first attempt was empirically wrong:**
-- **v1 (reverted):** deleted only the `Players` table (Frontend/Configuration
-  database). Tested in-game with a full relaunch — no change, all vanilla leaders
-  still appeared. Root cause: `Players` turned out to be display-only metadata
-  (icons/ability text), not what actually gates selectability. Its real gating
-  mechanism lives in the compiled game engine, not anything readable in the Lua UI
-  files, so this couldn't be fully confirmed by static inspection alone.
-- **v2 (current):** deletes `CivilizationLeaders` (Gameplay database) — the table
-  pairing a `LeaderType` to a `CivilizationType` — believed to be the actual gate,
-  since it's the most direct "this leader is assignable to this civ" table and
-  leaves each vanilla civ/leader's own catalog data (Civilopedia, AI logic, etc.)
-  completely untouched, unlike deleting from `Civilizations`/`Leaders` directly.
-  Also restores the `Players` delete (harmless on its own, kept for consistency)
-  and re-adds both a `Players` row and a `CivilizationLeaders` row for Rome/Trajan,
-  verbatim from the installed game's own files — reusing existing Firaxis content,
-  not new authored copy.
-- **Still not fully verified.** No way to trace the actual engine-side enumeration
-  logic without running the game. If v2 also fails to change the picker, the next
-  thing to try is deleting from `Civilizations`/`Leaders` (the primary catalog
-  tables) directly, or checking `StartingCivilizationLevelType` filtering.
+- `Data/Systems/Warmstone_HideVanillaLeaders_Config.xml` — Configuration database
+  (`Players`), wired to **FrontEndActions only**.
+- `Data/Systems/Warmstone_HideVanillaLeaders_Gameplay.xml` — Gameplay database
+  (`CivilizationLeaders`), wired to **InGameActions only**.
 
-**Load order is what makes this safe.** This action is wired in
-`Warmstone.modinfo` with a LoadOrder between the core systems (10) and each civ's
-own file (20) for InGameActions, and a negative LoadOrder (-10, before the default
-0) for FrontEndActions — so the deletes always run *before* each civ's own file
-re-adds its own rows. Any future civ file must keep a LoadOrder greater than 15
-(InGame) / greater than -10 (FrontEnd) or its row will get wiped by this delete
-instead of surviving it.
+**Revision history — v1 and v2 both failed, for a reason neither diagnosed:**
 
-This only affects games created while the mod is enabled — confirmed with the user
-that Civ6 rebuilds each game's ruleset database fresh from currently-active
-content, so it doesn't touch existing saves or games made without the mod.
+- **v1 (reverted):** deleted only `Players`. Tested in-game, no change. Concluded
+  at the time that `Players` was "display-only metadata". *That conclusion was
+  wrong* — see v3.
+- **v2 (reverted):** deleted `CivilizationLeaders` instead, keeping the `Players`
+  delete alongside it in the same file. Tested in-game, no change: every vanilla
+  leader still appeared, **and** the Stalwart leader never appeared either.
+- **v3 (current).** The second half of that v2 symptom — Stalwarts *also* missing
+  — was the clue that cracked it, because nothing in the hide-leaders logic should
+  have affected the mod's own civ. Three independent bugs, all now fixed:
+
+  1. **The logs being read were the wrong ones.** Civ6 on this machine writes its
+     live logs to `%LOCALAPPDATA%\Firaxis Games\Sid Meier's Civilization VI\Logs\`.
+     The `Documents\My Games\...\Logs\` folder also exists but is stale (last
+     written 2023). Every "Database.log is clean, Passed Validation" observation in
+     v1/v2 came from that stale file and meant nothing. The live log said:
+
+     ```
+     [Configuration] ERROR: no such table: CivilizationLeaders
+     [Configuration]: In Query - DELETE FROM CivilizationLeaders;
+     ```
+
+  2. **The file mixed both databases.** `Players` is Configuration-only;
+     `CivilizationLeaders` is Gameplay-only (confirmed against
+     `Configuration/Data/Schema/AdditionalTables.sql` and
+     `Gameplay/Data/Schema/01_GameplaySchema.sql`). The single v2 file was loaded
+     into *both* databases, so each pass hit a table that doesn't exist in it and
+     aborted the whole file — which is why the `Players` delete never committed.
+     Worse, `Modding.log` showed the abort also **skipped every later frontend
+     action from this mod**, so `Stalwarts_Config.xml` was never loaded at all.
+     Hence the missing Stalwart leader. Fix: one file per database, each wired to
+     exactly one action group.
+
+  3. **`Domain`, and load order.** The picker does not read `Players` wholesale.
+     `RulesetDomainOverrides` (in `DLC/Expansion2/Config/Expansion2_Players.xml`)
+     binds the `PlayerLeader` setup parameter to a domain per ruleset —
+     `RULESET_EXPANSION_2` → `Players:Expansion2_Players`. Rows with no `Domain`
+     default to `Players:StandardPlayers` (per the schema) and are invisible in a
+     Gathering Storm game. Every re-added row is now declared once per domain, the
+     way `DLC/Australia/Data/Australia_Config.xml` does it. Relatedly,
+     `Modding.log` timestamps showed the old `LoadOrder` of -10 running the delete
+     at t=…016.120 while `Expansion2_Players.xml` loaded at t=…017.079 and simply
+     repopulated the table afterwards.
+
+**Load order.** DLC data loads at the default LoadOrder 0, so anything deleting
+vanilla rows must run *later*, not earlier. Both hide-leaders actions now run at
+100, and each Warmstone civ at 110+, so civ rows are added after the delete rather
+than being wiped by it. Any future civ file must keep a LoadOrder above 100.
+
+This only affects games created while the mod is enabled — Civ6 rebuilds the
+database fresh from currently-active content, so existing saves and games made
+without the mod are untouched.
+
+**Verification standard for this feature:** a clean log is necessary but not
+sufficient, and the log must be the one in `%LOCALAPPDATA%`. The real test is the
+picker itself: only Trajan and the Stalwart leader present, nothing else.
 
 ## Phase 2 civ (current state): Stalwarts
 

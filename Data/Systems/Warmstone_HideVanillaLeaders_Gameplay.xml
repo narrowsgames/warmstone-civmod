@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Total-conversion behavior, GAMEPLAY-DATABASE half.
+
+  This file may only ever touch Gameplay-database tables. It is wired to
+  InGameActions ONLY in Warmstone.modinfo. Its Configuration-database
+  counterpart is Warmstone_HideVanillaLeaders_Config.xml, which carries the full
+  explanation of why the two must not be combined into one file.
+
+  Short version: the previous single-file version put `Players` (Configuration)
+  and `CivilizationLeaders` (Gameplay) together and loaded it into both
+  databases, so each pass hit a table that does not exist in it and aborted the
+  whole file. The Configuration-side failure is what left every vanilla leader in
+  the picker. The Gameplay-side failure had never been observed because no game
+  was ever actually started - it would have failed the same way, on
+  "no such table: Players".
+
+  `CivilizationLeaders` is the LeaderType<->CivilizationType pairing table. This
+  is the more surgical target than the `Civilizations`/`Leaders` catalog tables:
+  vanilla civ and leader data (Civilopedia entries, AI logic, art) stays intact,
+  only the pairing that makes them selectable goes away. Confirmed against
+  Base/Assets/Gameplay/Data/Schema/01_GameplaySchema.sql that no other gameplay
+  table carries a foreign key back to CivilizationLeaders, so a bare delete
+  leaves no dangling references.
+
+  Load order: the action for this file runs at LoadOrder 100, after all DLC
+  gameplay data, and each Warmstone civ's own files run later still (110+) so
+  their own CivilizationLeaders rows are added after this delete rather than
+  being wiped by it.
+-->
+<GameInfo>
+	<CivilizationLeaders>
+		<Delete/>
+		<Row CivilizationType="CIVILIZATION_ROME" LeaderType="LEADER_TRAJAN" CapitalName="LOC_CITY_NAME_ROME"/>
+	</CivilizationLeaders>
+</GameInfo>

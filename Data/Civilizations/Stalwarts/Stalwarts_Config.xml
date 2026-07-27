@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Frontend (leader-select screen) wiring for the Stalwarts.
+  Frontend (leader-select screen) wiring for the Stalwarts. Configuration-database
+  tables only - this file is wired to FrontEndActions ONLY in Warmstone.modinfo.
 
   All icons reuse existing base-game fallback icons (ICON_CIVILIZATION_UNKNOWN,
   ICON_LEADER_DEFAULT - the game's own "unmet civ/leader" placeholders) rather than
   shipping new art. PortraitBackground is omitted; confirmed from the game's own
   PlayerSetupLogic.lua that this is read as optional (`if info.PortraitBackground
   then`), so omitting it is safe rather than guessed.
+
+  DOMAIN: every row is declared once per player domain. The civ picker reads only
+  the domain bound to the `PlayerLeader` setup parameter for the ruleset actually
+  being played - RulesetDomainOverrides in DLC/Expansion2/Config/Expansion2_Players.xml
+  maps RULESET_EXPANSION_2 -> Players:Expansion2_Players. The earlier version of
+  this file declared each row once with no Domain, which per the schema default
+  (Configuration/Data/Schema/AdditionalTables.sql: 'Domain' TEXT DEFAULT
+  'Players:StandardPlayers') put the Stalwarts only in the base-game domain - so
+  they were invisible in a Gathering Storm game. DLC/Australia/Data/Australia_Config.xml
+  declares all three domains the same way; this follows it.
+
+  Placeholder Name/Description values are literal internal Type IDs, not authored
+  copy - Civ6 renders unresolved strings verbatim, so they read as obvious
+  placeholders. See docs/ARCHITECTURE.md.
 -->
 <GameInfo>
 	<Players>
-		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" CivilizationName="CIVILIZATION_WARMSTONE_STALWART" CivilizationIcon="ICON_CIVILIZATION_UNKNOWN" LeaderName="LEADER_WARMSTONE_STALWART" LeaderIcon="ICON_LEADER_DEFAULT" CivilizationAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityIcon="ICON_CIVILIZATION_UNKNOWN" LeaderAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityIcon="ICON_LEADER_DEFAULT"/>
+		<Row Domain="Players:StandardPlayers" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" CivilizationName="CIVILIZATION_WARMSTONE_STALWART" CivilizationIcon="ICON_CIVILIZATION_UNKNOWN" LeaderName="LEADER_WARMSTONE_STALWART" LeaderIcon="ICON_LEADER_DEFAULT" CivilizationAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityIcon="ICON_CIVILIZATION_UNKNOWN" LeaderAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityIcon="ICON_LEADER_DEFAULT"/>
+		<Row Domain="Players:Expansion1_Players" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" CivilizationName="CIVILIZATION_WARMSTONE_STALWART" CivilizationIcon="ICON_CIVILIZATION_UNKNOWN" LeaderName="LEADER_WARMSTONE_STALWART" LeaderIcon="ICON_LEADER_DEFAULT" CivilizationAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityIcon="ICON_CIVILIZATION_UNKNOWN" LeaderAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityIcon="ICON_LEADER_DEFAULT"/>
+		<Row Domain="Players:Expansion2_Players" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" CivilizationName="CIVILIZATION_WARMSTONE_STALWART" CivilizationIcon="ICON_CIVILIZATION_UNKNOWN" LeaderName="LEADER_WARMSTONE_STALWART" LeaderIcon="ICON_LEADER_DEFAULT" CivilizationAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityIcon="ICON_CIVILIZATION_UNKNOWN" LeaderAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityIcon="ICON_LEADER_DEFAULT"/>
 	</Players>
 	<PlayerItems>
-		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="UNIT_WARMSTONE_STALWART_VANGUARD" Icon="ICON_UNIT_WARRIOR" Name="UNIT_WARMSTONE_STALWART_VANGUARD" Description="UNIT_WARMSTONE_STALWART_VANGUARD" SortIndex="20"/>
-		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Icon="ICON_IMPROVEMENT_OUTBACK_STATION" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Description="IMPROVEMENT_WARMSTONE_STALWART_GROVE" SortIndex="30"/>
+		<Row Domain="Players:StandardPlayers" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="UNIT_WARMSTONE_STALWART_VANGUARD" Icon="ICON_UNIT_WARRIOR" Name="UNIT_WARMSTONE_STALWART_VANGUARD" Description="UNIT_WARMSTONE_STALWART_VANGUARD" SortIndex="20"/>
+		<Row Domain="Players:StandardPlayers" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Icon="ICON_IMPROVEMENT_OUTBACK_STATION" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Description="IMPROVEMENT_WARMSTONE_STALWART_GROVE" SortIndex="30"/>
+		<Row Domain="Players:Expansion1_Players" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="UNIT_WARMSTONE_STALWART_VANGUARD" Icon="ICON_UNIT_WARRIOR" Name="UNIT_WARMSTONE_STALWART_VANGUARD" Description="UNIT_WARMSTONE_STALWART_VANGUARD" SortIndex="20"/>
+		<Row Domain="Players:Expansion1_Players" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Icon="ICON_IMPROVEMENT_OUTBACK_STATION" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Description="IMPROVEMENT_WARMSTONE_STALWART_GROVE" SortIndex="30"/>
+		<Row Domain="Players:Expansion2_Players" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="UNIT_WARMSTONE_STALWART_VANGUARD" Icon="ICON_UNIT_WARRIOR" Name="UNIT_WARMSTONE_STALWART_VANGUARD" Description="UNIT_WARMSTONE_STALWART_VANGUARD" SortIndex="20"/>
+		<Row Domain="Players:Expansion2_Players" CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Icon="ICON_IMPROVEMENT_OUTBACK_STATION" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Description="IMPROVEMENT_WARMSTONE_STALWART_GROVE" SortIndex="30"/>
 	</PlayerItems>
 </GameInfo>

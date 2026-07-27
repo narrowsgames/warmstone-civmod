@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Total-conversion behavior, CONFIGURATION-DATABASE half.
+
+  This file may only ever touch Configuration-database tables (Players,
+  PlayerItems, ...). It is wired to FrontEndActions ONLY in Warmstone.modinfo.
+  Its Gameplay-database counterpart is Warmstone_HideVanillaLeaders_Gameplay.xml.
+  Keeping them separate is not cosmetic - see REVISION 3 below.
+
+  REVISION 3 (this file). Revisions 1 and 2 both failed, and the reason was
+  finally found in the *live* log at
+  %LOCALAPPDATA%\Firaxis Games\Sid Meier's Civilization VI\Logs\Database.log:
+
+      [Configuration] ERROR: no such table: CivilizationLeaders
+      [Configuration]: In Query - DELETE FROM CivilizationLeaders;
+      [Configuration] ERROR: ... error executing the delete statement!
+
+  The old single Warmstone_HideVanillaLeaders.xml mixed `Players` (a
+  Configuration-database table) and `CivilizationLeaders` (a Gameplay-database
+  table) in one file, and the .modinfo loaded that one file into BOTH databases.
+  In the Configuration pass `CivilizationLeaders` does not exist, so the file
+  aborted ("ModdingUpdateConfigurationDatabase - Error Loading XML" in
+  Modding.log) and the `Players` delete in the same file never committed. That is
+  why every vanilla leader was still in the picker. The abort also skipped every
+  remaining Warmstone frontend action, which is why Stalwarts_Config.xml was
+  never loaded at all and the Stalwart leader never appeared.
+
+  Two other things revisions 1-2 got wrong, both fixed here:
+
+  1. Domain. The picker does not read `Players` wholesale - it reads the domain
+     bound to the `PlayerLeader` setup parameter for the active ruleset, per
+     Configuration/Data/Schema/AdditionalTables.sql (`Domain` DEFAULT
+     'Players:StandardPlayers') and the RulesetDomainOverrides rows in
+     DLC/Expansion*/Config/Expansion*_Players.xml:
+         RULESET_EXPANSION_2 / PlayerLeader -> Players:Expansion2_Players
+     So a Gathering Storm game reads only Players:Expansion2_Players. A row with
+     no Domain lands in Players:StandardPlayers and is invisible there. Every
+     re-added row below is therefore declared once per domain, exactly the way
+     DLC/Australia/Data/Australia_Config.xml does it.
+
+  2. Load order. The bare <Delete/> removes every row present *at the time it
+     runs*. Modding.log showed the old LoadOrder of -10 running this at
+     t=2782016.120, while DLC/Expansion2/Config/Expansion2_Players.xml loaded
+     afterwards at t=2782017.079 and repopulated the table. The frontend action
+     for this file now carries a LoadOrder of 100 so it runs after all DLC
+     config, and Stalwarts_Config.xml runs later still at 110.
+
+  Kept: CIVILIZATION_ROME / LEADER_TRAJAN, so AI opponents have at least one
+  non-Warmstone option while only Stalwarts exists on the Warmstone side. The
+  re-added rows reuse Rome/Trajan's own shipped Firaxis LOC keys and icons
+  verbatim (taken from Base/Assets/Configuration/Data/Players.xml) - that is
+  re-pointing at already-shipped vanilla content, not new authored copy.
+
+  PlayerItems is deliberately left alone: rows belonging to civs that are no
+  longer in the picker are simply never queried, and deleting the table would
+  also throw away Rome's own unique-item entries for no benefit.
+
+  This only ever affects games created while this mod is enabled - Civ6 rebuilds
+  the configuration database from currently-active content each time mod state
+  changes.
+-->
+<GameInfo>
+	<Players>
+		<Delete/>
+		<Row Domain="Players:StandardPlayers" CivilizationType="CIVILIZATION_ROME" LeaderType="LEADER_TRAJAN" CivilizationName="LOC_CIVILIZATION_ROME_NAME" CivilizationIcon="ICON_CIVILIZATION_ROME" LeaderName="LOC_LEADER_TRAJAN_NAME" LeaderIcon="ICON_LEADER_TRAJAN" CivilizationAbilityName="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_NAME" CivilizationAbilityDescription="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_DESCRIPTION" CivilizationAbilityIcon="ICON_CIVILIZATION_ROME" LeaderAbilityName="LOC_TRAIT_LEADER_TRAJANS_COLUMN_NAME" LeaderAbilityDescription="LOC_TRAIT_LEADER_TRAJANS_COLUMN_DESCRIPTION" LeaderAbilityIcon="ICON_LEADER_TRAJAN"/>
+		<Row Domain="Players:Expansion1_Players" CivilizationType="CIVILIZATION_ROME" LeaderType="LEADER_TRAJAN" CivilizationName="LOC_CIVILIZATION_ROME_NAME" CivilizationIcon="ICON_CIVILIZATION_ROME" LeaderName="LOC_LEADER_TRAJAN_NAME" LeaderIcon="ICON_LEADER_TRAJAN" CivilizationAbilityName="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_NAME" CivilizationAbilityDescription="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_DESCRIPTION" CivilizationAbilityIcon="ICON_CIVILIZATION_ROME" LeaderAbilityName="LOC_TRAIT_LEADER_TRAJANS_COLUMN_NAME" LeaderAbilityDescription="LOC_TRAIT_LEADER_TRAJANS_COLUMN_DESCRIPTION" LeaderAbilityIcon="ICON_LEADER_TRAJAN"/>
+		<Row Domain="Players:Expansion2_Players" CivilizationType="CIVILIZATION_ROME" LeaderType="LEADER_TRAJAN" CivilizationName="LOC_CIVILIZATION_ROME_NAME" CivilizationIcon="ICON_CIVILIZATION_ROME" LeaderName="LOC_LEADER_TRAJAN_NAME" LeaderIcon="ICON_LEADER_TRAJAN" CivilizationAbilityName="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_NAME" CivilizationAbilityDescription="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_DESCRIPTION" CivilizationAbilityIcon="ICON_CIVILIZATION_ROME" LeaderAbilityName="LOC_TRAIT_LEADER_TRAJANS_COLUMN_NAME" LeaderAbilityDescription="LOC_TRAIT_LEADER_TRAJANS_COLUMN_DESCRIPTION" LeaderAbilityIcon="ICON_LEADER_TRAJAN"/>
+	</Players>
+</GameInfo>

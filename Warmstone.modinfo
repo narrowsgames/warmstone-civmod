@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Action wiring rules for this mod (learned the hard way - see
+  Data/Systems/Warmstone_HideVanillaLeaders_Config.xml for the full diagnosis):
+
+  * A file that touches Configuration-database tables (Players, PlayerItems, ...)
+    belongs in FrontEndActions ONLY.
+  * A file that touches Gameplay-database tables (Civilizations, Leaders,
+    CivilizationLeaders, Units, Improvements, ...) belongs in InGameActions ONLY.
+  * Never load one file into both. Each database only has its own tables, so a
+    mixed file aborts on "no such table" in whichever pass lacks it - and the
+    abort skips the rest of that file AND every later action from this mod.
+
+  LoadOrder: DLC config/gameplay data loads at the default (0). Anything that
+  deletes vanilla rows must therefore run at a HIGHER LoadOrder than the DLC, or
+  the expansions simply repopulate the table afterwards. Hence 100 for the
+  hide-vanilla-leaders pass, and 110+ for each Warmstone civ so its own rows are
+  added after that delete rather than being caught by it.
+-->
 <Mod id="644637f8-7e68-4428-9dc3-a3ef0e9b8ee1" version="1">
 	<Properties>
 		<Name>WARMSTONE_MOD_TITLE</Name>
@@ -21,29 +39,28 @@
 		</UpdateDatabase>
 		<UpdateDatabase id="Warmstone_HideVanillaLeaders">
 			<Properties>
-				<LoadOrder>15</LoadOrder>
+				<LoadOrder>100</LoadOrder>
 			</Properties>
-			<File>Data/Systems/Warmstone_HideVanillaLeaders.xml</File>
+			<File>Data/Systems/Warmstone_HideVanillaLeaders_Gameplay.xml</File>
 		</UpdateDatabase>
 		<UpdateDatabase id="Warmstone_Stalwarts">
 			<Properties>
-				<LoadOrder>20</LoadOrder>
+				<LoadOrder>110</LoadOrder>
 			</Properties>
 			<File priority="1">Data/Civilizations/Stalwarts/Stalwarts_Civilization.xml</File>
 			<File priority="2">Data/Civilizations/Stalwarts/Stalwarts_Leaders.xml</File>
-			<File priority="3">Data/Civilizations/Stalwarts/Stalwarts_Config.xml</File>
 		</UpdateDatabase>
 	</InGameActions>
 	<FrontEndActions>
 		<UpdateDatabase id="Warmstone_HideVanillaLeaders_FrontEnd">
 			<Properties>
-				<LoadOrder>-10</LoadOrder>
+				<LoadOrder>100</LoadOrder>
 			</Properties>
-			<File>Data/Systems/Warmstone_HideVanillaLeaders.xml</File>
+			<File>Data/Systems/Warmstone_HideVanillaLeaders_Config.xml</File>
 		</UpdateDatabase>
 		<UpdateDatabase id="Warmstone_Stalwarts_FrontEnd">
 			<Properties>
-				<LoadOrder>0</LoadOrder>
+				<LoadOrder>110</LoadOrder>
 			</Properties>
 			<File>Data/Civilizations/Stalwarts/Stalwarts_Config.xml</File>
 		</UpdateDatabase>
@@ -52,7 +69,8 @@
 		<File>Data/Systems/Warmstone_Resources.xml</File>
 		<File>Data/Systems/Warmstone_Terrain.xml</File>
 		<File>Data/Systems/Warmstone_Governments.xml</File>
-		<File>Data/Systems/Warmstone_HideVanillaLeaders.xml</File>
+		<File>Data/Systems/Warmstone_HideVanillaLeaders_Config.xml</File>
+		<File>Data/Systems/Warmstone_HideVanillaLeaders_Gameplay.xml</File>
 		<File>Data/Civilizations/Stalwarts/Stalwarts_Civilization.xml</File>
 		<File>Data/Civilizations/Stalwarts/Stalwarts_Leaders.xml</File>
 		<File>Data/Civilizations/Stalwarts/Stalwarts_Config.xml</File>
