@@ -5,6 +5,7 @@
 		<Description>WARMSTONE_MOD_DESCRIPTION</Description>
 		<Teaser>WARMSTONE_MOD_TEASER</Teaser>
 		<Authors>WARMSTONE_MOD_AUTHOR</Authors>
+		<CompatibleVersions>2.0</CompatibleVersions>
 	</Properties>
 	<Dependencies>
 		<Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
