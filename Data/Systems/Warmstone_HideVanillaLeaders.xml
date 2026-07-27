@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Total-conversion behavior: hide every vanilla/DLC leader from the "Choose
-  Civilization" picker so only Warmstone civs are offered.
+  Total-conversion behavior: hide (almost) every vanilla/DLC leader so only
+  Warmstone civs, plus exactly one vanilla leader for AI opponents to use, are
+  available.
 
-  This deletes every row from the `Players` table (Frontend/Configuration
-  database), which is confirmed (by grepping the installed game's own
-  Configuration files) to be the table that exclusively drives that picker
-  screen - separate from barbarians/city-states/free cities, which have no
-  presence in this table at all and are unaffected.
+  REVISION 2: the original version only deleted the `Players` table (Frontend/
+  Configuration database). Confirmed in-game (full relaunch, no change) that this
+  was wrong - `Players` turned out to be display-only metadata (icons/ability
+  text), not what actually gates which leaders are selectable. That real gate is
+  believed to be `CivilizationLeaders` (Gameplay database), the table that pairs
+  a LeaderType to a CivilizationType - deleting the pairing here rather than the
+  `Civilizations`/`Leaders` catalog tables themselves is the more surgical option:
+  it leaves every vanilla civ/leader's own data (Civilopedia entries, AI logic,
+  etc.) fully intact, it just removes their availability as a human/AI pick.
 
-  Per the modding guide's own "Deleting Items and Rows" chapter: global deletes
-  of a primary table are reserved for Total Conversion mods, which this is
-  (see README.md). Load-order matters: this file's actions are given a LOWER
-  LoadOrder than any civ's own Config.xml file in Warmstone.modinfo, so the
-  delete runs first and each Warmstone civ's own Players row (added by its own
-  Config.xml) survives.
+  NOTE: this is still not fully verified without running the game - the actual
+  enumeration logic lives in the compiled game engine, not anything readable in
+  the Lua UI files. If this doesn't work either, the next thing to try would be
+  the `Civilizations`/`Leaders` primary tables directly.
+
+  Kept: CIVILIZATION_ROME / LEADER_TRAJAN, so AI opponents have at least one real
+  option in a normal-sized game while only Stalwarts exists on the Warmstone side.
+  Both re-added rows below use Rome/Trajan's own existing Firaxis LOC keys and
+  icons verbatim (confirmed from the installed game's own
+  Configuration/Data/Players.xml and Gameplay/Data/Civilizations.xml) - this is
+  reusing already-shipped vanilla content, not new authored copy.
+
+  Load-order matters: this file's actions are given a LOWER LoadOrder than any
+  civ's own file in Warmstone.modinfo, so these deletes run first and each
+  Warmstone civ's own rows (added by its own Civilization/Config files) survive.
 
   This only ever affects games created while this mod is enabled - Civ6 rebuilds
   the ruleset database fresh per game from currently-active content, so
@@ -23,5 +37,10 @@
 <GameInfo>
 	<Players>
 		<Delete/>
+		<Row CivilizationType="CIVILIZATION_ROME" LeaderType="LEADER_TRAJAN" CivilizationName="LOC_CIVILIZATION_ROME_NAME" CivilizationIcon="ICON_CIVILIZATION_ROME" LeaderName="LOC_LEADER_TRAJAN_NAME" LeaderIcon="ICON_LEADER_TRAJAN" CivilizationAbilityName="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_NAME" CivilizationAbilityDescription="LOC_TRAIT_CIVILIZATION_ALL_ROADS_TO_ROME_DESCRIPTION" CivilizationAbilityIcon="ICON_CIVILIZATION_ROME" LeaderAbilityName="LOC_TRAIT_LEADER_TRAJANS_COLUMN_NAME" LeaderAbilityDescription="LOC_TRAIT_LEADER_TRAJANS_COLUMN_DESCRIPTION" LeaderAbilityIcon="ICON_LEADER_TRAJAN"/>
 	</Players>
+	<CivilizationLeaders>
+		<Delete/>
+		<Row CivilizationType="CIVILIZATION_ROME" LeaderType="LEADER_TRAJAN" CapitalName="LOC_CITY_NAME_ROME"/>
+	</CivilizationLeaders>
 </GameInfo>

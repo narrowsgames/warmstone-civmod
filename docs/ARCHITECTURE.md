@@ -72,20 +72,38 @@ docs/                   -- this file and other internal technical notes
 
 ## Total-conversion behavior: hiding vanilla leaders
 
-`Data/Systems/Warmstone_HideVanillaLeaders.xml` does a global `<Delete/>` on the
-`Players` table (Frontend/Configuration database) so only Warmstone civs appear in
-the "Choose Civilization" picker. Confirmed by grepping the installed game's
-Configuration schema/files that: (a) `Players` is the table exclusively driving
-that picker (`PlayerSetupLogic.lua`), and (b) barbarians/city-states/free-cities
-have no presence in it at all, so they're unaffected by the blanket delete.
+`Data/Systems/Warmstone_HideVanillaLeaders.xml` hides vanilla/DLC leaders from the
+"Choose Civilization" picker, keeping exactly one (Rome/Trajan) available so AI
+opponents have something to be assigned to while only Stalwarts exists.
+
+**Revision history, since the first attempt was empirically wrong:**
+- **v1 (reverted):** deleted only the `Players` table (Frontend/Configuration
+  database). Tested in-game with a full relaunch — no change, all vanilla leaders
+  still appeared. Root cause: `Players` turned out to be display-only metadata
+  (icons/ability text), not what actually gates selectability. Its real gating
+  mechanism lives in the compiled game engine, not anything readable in the Lua UI
+  files, so this couldn't be fully confirmed by static inspection alone.
+- **v2 (current):** deletes `CivilizationLeaders` (Gameplay database) — the table
+  pairing a `LeaderType` to a `CivilizationType` — believed to be the actual gate,
+  since it's the most direct "this leader is assignable to this civ" table and
+  leaves each vanilla civ/leader's own catalog data (Civilopedia, AI logic, etc.)
+  completely untouched, unlike deleting from `Civilizations`/`Leaders` directly.
+  Also restores the `Players` delete (harmless on its own, kept for consistency)
+  and re-adds both a `Players` row and a `CivilizationLeaders` row for Rome/Trajan,
+  verbatim from the installed game's own files — reusing existing Firaxis content,
+  not new authored copy.
+- **Still not fully verified.** No way to trace the actual engine-side enumeration
+  logic without running the game. If v2 also fails to change the picker, the next
+  thing to try is deleting from `Civilizations`/`Leaders` (the primary catalog
+  tables) directly, or checking `StartingCivilizationLevelType` filtering.
 
 **Load order is what makes this safe.** This action is wired in
 `Warmstone.modinfo` with a LoadOrder between the core systems (10) and each civ's
 own file (20) for InGameActions, and a negative LoadOrder (-10, before the default
-0) for FrontEndActions — so the delete always runs *before* each civ's own
-Config.xml re-adds its own `Players` row. Any future civ file must keep a
-LoadOrder greater than 15 (InGame) / greater than -10 (FrontEnd) or its row will
-get wiped by this delete instead of surviving it.
+0) for FrontEndActions — so the deletes always run *before* each civ's own file
+re-adds its own rows. Any future civ file must keep a LoadOrder greater than 15
+(InGame) / greater than -10 (FrontEnd) or its row will get wiped by this delete
+instead of surviving it.
 
 This only affects games created while the mod is enabled — confirmed with the user
 that Civ6 rebuilds each game's ruleset database fresh from currently-active
