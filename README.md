@@ -1,6 +1,6 @@
 # Warmstone Mod for Civilization VI
 
-This total-conversion mod for Sid Meier's Civilization VI presents the fictional alien world whose name we transcribe as *Warmstone*.
+This total-conversion mod for Sid Meier's Civilization VI presents the fictional alien world whose name we translate literally as *Warmstone*.
 
 
 ## AI Disclosure
