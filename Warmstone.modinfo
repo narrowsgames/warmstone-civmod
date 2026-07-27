@@ -19,6 +19,12 @@
 			<File priority="2">Data/Systems/Warmstone_Terrain.xml</File>
 			<File priority="3">Data/Systems/Warmstone_Governments.xml</File>
 		</UpdateDatabase>
+		<UpdateDatabase id="Warmstone_HideVanillaLeaders">
+			<Properties>
+				<LoadOrder>15</LoadOrder>
+			</Properties>
+			<File>Data/Systems/Warmstone_HideVanillaLeaders.xml</File>
+		</UpdateDatabase>
 		<UpdateDatabase id="Warmstone_Stalwarts">
 			<Properties>
 				<LoadOrder>20</LoadOrder>
@@ -29,7 +35,16 @@
 		</UpdateDatabase>
 	</InGameActions>
 	<FrontEndActions>
+		<UpdateDatabase id="Warmstone_HideVanillaLeaders_FrontEnd">
+			<Properties>
+				<LoadOrder>-10</LoadOrder>
+			</Properties>
+			<File>Data/Systems/Warmstone_HideVanillaLeaders.xml</File>
+		</UpdateDatabase>
 		<UpdateDatabase id="Warmstone_Stalwarts_FrontEnd">
+			<Properties>
+				<LoadOrder>0</LoadOrder>
+			</Properties>
 			<File>Data/Civilizations/Stalwarts/Stalwarts_Config.xml</File>
 		</UpdateDatabase>
 	</FrontEndActions>
@@ -37,6 +52,7 @@
 		<File>Data/Systems/Warmstone_Resources.xml</File>
 		<File>Data/Systems/Warmstone_Terrain.xml</File>
 		<File>Data/Systems/Warmstone_Governments.xml</File>
+		<File>Data/Systems/Warmstone_HideVanillaLeaders.xml</File>
 		<File>Data/Civilizations/Stalwarts/Stalwarts_Civilization.xml</File>
 		<File>Data/Civilizations/Stalwarts/Stalwarts_Leaders.xml</File>
 		<File>Data/Civilizations/Stalwarts/Stalwarts_Config.xml</File>

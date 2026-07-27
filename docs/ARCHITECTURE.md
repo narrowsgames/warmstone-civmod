@@ -70,6 +70,27 @@ docs/                   -- this file and other internal technical notes
   existing `ModifierType`/`GovernmentBonusType` — mods can't add new
   EffectTypes/CollectionTypes/BonusTypes, only recombine existing ones.
 
+## Total-conversion behavior: hiding vanilla leaders
+
+`Data/Systems/Warmstone_HideVanillaLeaders.xml` does a global `<Delete/>` on the
+`Players` table (Frontend/Configuration database) so only Warmstone civs appear in
+the "Choose Civilization" picker. Confirmed by grepping the installed game's
+Configuration schema/files that: (a) `Players` is the table exclusively driving
+that picker (`PlayerSetupLogic.lua`), and (b) barbarians/city-states/free-cities
+have no presence in it at all, so they're unaffected by the blanket delete.
+
+**Load order is what makes this safe.** This action is wired in
+`Warmstone.modinfo` with a LoadOrder between the core systems (10) and each civ's
+own file (20) for InGameActions, and a negative LoadOrder (-10, before the default
+0) for FrontEndActions — so the delete always runs *before* each civ's own
+Config.xml re-adds its own `Players` row. Any future civ file must keep a
+LoadOrder greater than 15 (InGame) / greater than -10 (FrontEnd) or its row will
+get wiped by this delete instead of surviving it.
+
+This only affects games created while the mod is enabled — confirmed with the user
+that Civ6 rebuilds each game's ruleset database fresh from currently-active
+content, so it doesn't touch existing saves or games made without the mod.
+
 ## Phase 2 civ (current state): Stalwarts
 
 `Data/Civilizations/Stalwarts/` — the proof-of-concept civ, structurally modeled

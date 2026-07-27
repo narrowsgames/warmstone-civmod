@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Total-conversion behavior: hide every vanilla/DLC leader from the "Choose
+  Civilization" picker so only Warmstone civs are offered.
+
+  This deletes every row from the `Players` table (Frontend/Configuration
+  database), which is confirmed (by grepping the installed game's own
+  Configuration files) to be the table that exclusively drives that picker
+  screen - separate from barbarians/city-states/free cities, which have no
+  presence in this table at all and are unaffected.
+
+  Per the modding guide's own "Deleting Items and Rows" chapter: global deletes
+  of a primary table are reserved for Total Conversion mods, which this is
+  (see README.md). Load-order matters: this file's actions are given a LOWER
+  LoadOrder than any civ's own Config.xml file in Warmstone.modinfo, so the
+  delete runs first and each Warmstone civ's own Players row (added by its own
+  Config.xml) survives.
+
+  This only ever affects games created while this mod is enabled - Civ6 rebuilds
+  the ruleset database fresh per game from currently-active content, so
+  disabling the mod (or games that never had it enabled) is untouched.
+-->
+<GameInfo>
+	<Players>
+		<Delete/>
+	</Players>
+</GameInfo>
