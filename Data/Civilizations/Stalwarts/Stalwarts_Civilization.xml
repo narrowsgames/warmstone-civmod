@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  CIVILIZATION_WARMSTONE_STALWART - proof-of-concept civ for the mod pipeline.
+
+  Reflects only settled Beyond Warmsun canon for the Stalwarts (species_naming_brief.md,
+  homeworld_brief.md #Species Biomes): closed-canopy rainforest origin, high endurance,
+  toxin resistance, pain resistance, history of violent resistance to colonization.
+  No invented lore beyond mechanically translating those traits.
+
+  Unique ability: land units ignore terrain movement cost (reuses vanilla's existing
+  ABILITY_IGNORE_TERRAIN_COST, the same ability Helicopters get - endurance across
+  rough terrain) plus a flat +3 combat strength (reuses MODIFIER_PLAYER_UNITS_ADJUST_COMBAT_STRENGTH,
+  unconditional - pain/toxin resistance in a fight). Both grounded in confirmed
+  working vanilla patterns, see docs/ARCHITECTURE.md.
+
+  Unique unit and unique improvement follow the exact structural pattern of the
+  installed game's own Australia DLC (UNIT_DIGGER / IMPROVEMENT_OUTBACK_STATION),
+  confirmed by reading those files directly.
+
+  Placeholder Name/Description values are literal internal Type IDs, not authored
+  copy. No CivilizationCitizenNames list is defined (that's authored flavor text,
+  out of scope here) - see docs/ARCHITECTURE.md for what a human author still needs
+  to add.
+-->
+<GameInfo>
+	<Types>
+		<Row Type="CIVILIZATION_WARMSTONE_STALWART" Kind="KIND_CIVILIZATION"/>
+		<Row Type="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" Kind="KIND_TRAIT"/>
+		<Row Type="TRAIT_CIVILIZATION_WARMSTONE_STALWART_UNIT" Kind="KIND_TRAIT"/>
+		<Row Type="TRAIT_CIVILIZATION_WARMSTONE_STALWART_IMPROVEMENT" Kind="KIND_TRAIT"/>
+		<Row Type="UNIT_WARMSTONE_STALWART_VANGUARD" Kind="KIND_UNIT"/>
+		<Row Type="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Kind="KIND_IMPROVEMENT"/>
+	</Types>
+	<Civilizations>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" Name="CIVILIZATION_WARMSTONE_STALWART" Description="CIVILIZATION_WARMSTONE_STALWART" Adjective="CIVILIZATION_WARMSTONE_STALWART" StartingCivilizationLevelType="CIVILIZATION_LEVEL_FULL_CIV" RandomCityNameDepth="3"/>
+	</Civilizations>
+	<CivilizationLeaders>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" CapitalName="LOC_CITY_NAME_WARMSTONE_STALWART_1"/>
+	</CivilizationLeaders>
+	<CivilizationTraits>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE"/>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_UNIT"/>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_IMPROVEMENT"/>
+	</CivilizationTraits>
+	<CityNames>
+		<!-- Placeholder city name pool - literal tokens, not authored names. A human
+		     author should replace this whole list with real names before shipping. -->
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" CityName="LOC_CITY_NAME_WARMSTONE_STALWART_1"/>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" CityName="LOC_CITY_NAME_WARMSTONE_STALWART_2"/>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" CityName="LOC_CITY_NAME_WARMSTONE_STALWART_3"/>
+	</CityNames>
+	<StartBiasResources>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" ResourceType="RESOURCE_WARMSTONE_CANOPY_SAP" Tier="5"/>
+	</StartBiasResources>
+	<StartBiasTerrains>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" TerrainType="TERRAIN_GRASS" Tier="2"/>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" TerrainType="TERRAIN_PLAINS" Tier="2"/>
+	</StartBiasTerrains>
+	<Traits>
+		<Row TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" Name="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" Description="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE"/>
+		<Row TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_UNIT" Name="UNIT_WARMSTONE_STALWART_VANGUARD"/>
+		<Row TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_IMPROVEMENT" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE"/>
+	</Traits>
+	<TraitModifiers>
+		<Row>
+			<TraitType>TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE</TraitType>
+			<ModifierId>WARMSTONE_STALWART_IGNORE_TERRAIN_COST</ModifierId>
+		</Row>
+		<Row>
+			<TraitType>TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE</TraitType>
+			<ModifierId>WARMSTONE_STALWART_COMBAT_BONUS</ModifierId>
+		</Row>
+	</TraitModifiers>
+	<Modifiers>
+		<Row>
+			<ModifierId>WARMSTONE_STALWART_IGNORE_TERRAIN_COST</ModifierId>
+			<ModifierType>MODIFIER_PLAYER_UNITS_GRANT_ABILITY</ModifierType>
+		</Row>
+		<Row>
+			<ModifierId>WARMSTONE_STALWART_COMBAT_BONUS</ModifierId>
+			<ModifierType>MODIFIER_PLAYER_UNITS_ADJUST_COMBAT_STRENGTH</ModifierType>
+		</Row>
+	</Modifiers>
+	<ModifierArguments>
+		<Row><ModifierId>WARMSTONE_STALWART_IGNORE_TERRAIN_COST</ModifierId><Name>AbilityType</Name><Value>ABILITY_IGNORE_TERRAIN_COST</Value></Row>
+		<Row><ModifierId>WARMSTONE_STALWART_COMBAT_BONUS</ModifierId><Name>Amount</Name><Value>3</Value></Row>
+	</ModifierArguments>
+	<!-- Unique unit: replaces Warrior, same upgrade path, modest combat bump. -->
+	<UnitReplaces>
+		<Row CivUniqueUnitType="UNIT_WARMSTONE_STALWART_VANGUARD" ReplacesUnitType="UNIT_WARRIOR"/>
+	</UnitReplaces>
+	<UnitUpgrades>
+		<Row Unit="UNIT_WARMSTONE_STALWART_VANGUARD" UpgradeUnit="UNIT_SWORDSMAN"/>
+	</UnitUpgrades>
+	<Units>
+		<Row UnitType="UNIT_WARMSTONE_STALWART_VANGUARD" BaseMoves="2" Cost="40" BaseSightRange="2" ZoneOfControl="true" Domain="DOMAIN_LAND" FormationClass="FORMATION_CLASS_LAND_COMBAT" Name="UNIT_WARMSTONE_STALWART_VANGUARD" Description="UNIT_WARMSTONE_STALWART_VANGUARD" PurchaseYield="YIELD_GOLD" PromotionClass="PROMOTION_CLASS_MELEE" AdvisorType="ADVISOR_CONQUEST" Combat="22" MandatoryObsoleteTech="TECH_GUNPOWDER" TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_UNIT"/>
+	</Units>
+	<!-- Unique improvement: buildable on the Stalwart home biome feature (and vanilla
+	     Jungle, since Stalwarts range beyond their own biome too), modest yield. -->
+	<Improvements>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Description="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Icon="ICON_IMPROVEMENT_OUTBACK_STATION" PlunderType="PLUNDER_HEAL" PlunderAmount="50" Buildable="true" PrereqCivic="CIVIC_CRAFTSMANSHIP" TraitType="TRAIT_CIVILIZATION_WARMSTONE_STALWART_IMPROVEMENT"/>
+	</Improvements>
+	<Improvement_ValidTerrains>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" TerrainType="TERRAIN_GRASS"/>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" TerrainType="TERRAIN_GRASS_HILLS"/>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" TerrainType="TERRAIN_PLAINS"/>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" TerrainType="TERRAIN_PLAINS_HILLS"/>
+	</Improvement_ValidTerrains>
+	<Improvement_ValidFeatures>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" FeatureType="FEATURE_WARMSTONE_CANOPY"/>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" FeatureType="FEATURE_JUNGLE"/>
+	</Improvement_ValidFeatures>
+	<Improvement_ValidBuildUnits>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" UnitType="UNIT_BUILDER"/>
+	</Improvement_ValidBuildUnits>
+	<Improvement_YieldChanges>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" YieldType="YIELD_PRODUCTION" YieldChange="1"/>
+		<Row ImprovementType="IMPROVEMENT_WARMSTONE_STALWART_GROVE" YieldType="YIELD_FOOD" YieldChange="1"/>
+	</Improvement_YieldChanges>
+</GameInfo>

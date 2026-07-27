@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  LEADER_WARMSTONE_STALWART - minimal leader definition.
+
+  UNVERIFIED: per the user's decision to use a static 2D leader with no animated 3D
+  scene, this intentionally omits SceneLayers (the attribute that normally declares
+  how many custom scene-art layers a leader has). InheritFrom="LEADER_DEFAULT" is kept
+  for its behavioral/AI defaults, not for art. Whether the diplomacy screen renders
+  something reasonable (vs. blank/broken) with no scene layers declared is NOT
+  something I can verify without the game running - this is the first thing to check
+  in the in-game test pass. See docs/ARCHITECTURE.md.
+
+  No LeaderQuotes, Agendas, AiLists, or AiFavoredItems are defined - those are
+  AI-flavor/text extras, skipped to keep this proof-of-concept phase minimal. The
+  leader ability intentionally reuses the civilization ability trait rather than
+  defining a second, mechanically distinct one.
+-->
+<GameInfo>
+	<Types>
+		<Row Type="LEADER_WARMSTONE_STALWART" Kind="KIND_LEADER"/>
+	</Types>
+	<Leaders>
+		<Row LeaderType="LEADER_WARMSTONE_STALWART" Name="LEADER_WARMSTONE_STALWART" InheritFrom="LEADER_DEFAULT"/>
+	</Leaders>
+</GameInfo>

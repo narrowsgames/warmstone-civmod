@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Frontend (leader-select screen) wiring for the Stalwarts.
+
+  All icons reuse existing base-game fallback icons (ICON_CIVILIZATION_UNKNOWN,
+  ICON_LEADER_DEFAULT - the game's own "unmet civ/leader" placeholders) rather than
+  shipping new art. PortraitBackground is omitted; confirmed from the game's own
+  PlayerSetupLogic.lua that this is read as optional (`if info.PortraitBackground
+  then`), so omitting it is safe rather than guessed.
+-->
+<GameInfo>
+	<Players>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" CivilizationName="CIVILIZATION_WARMSTONE_STALWART" CivilizationIcon="ICON_CIVILIZATION_UNKNOWN" LeaderName="LEADER_WARMSTONE_STALWART" LeaderIcon="ICON_LEADER_DEFAULT" CivilizationAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" CivilizationAbilityIcon="ICON_CIVILIZATION_UNKNOWN" LeaderAbilityName="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityDescription="TRAIT_CIVILIZATION_WARMSTONE_STALWART_RESILIENCE" LeaderAbilityIcon="ICON_LEADER_DEFAULT"/>
+	</Players>
+	<PlayerItems>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="UNIT_WARMSTONE_STALWART_VANGUARD" Icon="ICON_UNIT_WARRIOR" Name="UNIT_WARMSTONE_STALWART_VANGUARD" Description="UNIT_WARMSTONE_STALWART_VANGUARD" SortIndex="20"/>
+		<Row CivilizationType="CIVILIZATION_WARMSTONE_STALWART" LeaderType="LEADER_WARMSTONE_STALWART" Type="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Icon="ICON_IMPROVEMENT_OUTBACK_STATION" Name="IMPROVEMENT_WARMSTONE_STALWART_GROVE" Description="IMPROVEMENT_WARMSTONE_STALWART_GROVE" SortIndex="30"/>
+	</PlayerItems>
+</GameInfo>

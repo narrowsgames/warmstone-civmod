@@ -70,6 +70,34 @@ docs/                   -- this file and other internal technical notes
   existing `ModifierType`/`GovernmentBonusType` — mods can't add new
   EffectTypes/CollectionTypes/BonusTypes, only recombine existing ones.
 
+## Phase 2 civ (current state): Stalwarts
+
+`Data/Civilizations/Stalwarts/` — the proof-of-concept civ, structurally modeled
+directly on the installed game's own `DLC/Australia/` files (confirmed by reading
+them, not guessed):
+
+- `Stalwarts_Civilization.xml` — civ, capital/city-name placeholders, unique ability
+  (grants existing `ABILITY_IGNORE_TERRAIN_COST` + flat +3 combat strength, both
+  reusing confirmed-working vanilla ModifierTypes), unique unit (Warrior replacement),
+  unique improvement (buildable on the new Canopy feature and vanilla Jungle).
+- `Stalwarts_Leaders.xml` — minimal leader definition.
+- `Stalwarts_Config.xml` — frontend (leader-select screen) wiring, all icons reused
+  from existing base-game fallbacks (`ICON_CIVILIZATION_UNKNOWN`, `ICON_LEADER_DEFAULT`).
+
+**UNVERIFIED — first thing to check in-game:** the leader intentionally omits
+`SceneLayers` (no 3D scene, per the "static 2D leader" decision). Whether the
+diplomacy screen renders acceptably with no scene layers declared, or breaks, isn't
+something I can check without the game running.
+
+A lightweight self-consistency script (every `*Type=`/`TraitType`/`ModifierId`
+reference in this mod's own `WARMSTONE_*` namespace resolves to something actually
+declared) was run over `Data/` before committing — it caught one real bug (the
+unique unit and improvement Types were referenced throughout but never registered in
+the `<Types>` table) which is now fixed. It does not, and cannot, verify vanilla
+constant names (`ABILITY_IGNORE_TERRAIN_COST`, `CIVIC_CRAFTSMANSHIP`, etc.) — those
+were each individually confirmed by grepping the installed game's own files, not
+assumed from memory.
+
 ## Known open items for the human author
 
 - No `LOC_*` text or art exists anywhere in this mod yet — see the content boundary
